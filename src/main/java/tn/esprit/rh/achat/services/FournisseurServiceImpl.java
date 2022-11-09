@@ -1,6 +1,8 @@
 package tn.esprit.rh.achat.services;
 
-import lombok.extern.slf4j.Slf4j;
+
+
+import org.hibernate.annotations.common.util.impl.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.rh.achat.entities.DetailFournisseur;
@@ -15,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-@Slf4j
+
 public class FournisseurServiceImpl implements IFournisseurService {
 
 	@Autowired
@@ -31,7 +33,7 @@ public class FournisseurServiceImpl implements IFournisseurService {
 	public List<Fournisseur> retrieveAllFournisseurs() {
 		List<Fournisseur> fournisseurs = (List<Fournisseur>) fournisseurRepository.findAll();
 		for (Fournisseur fournisseur : fournisseurs) {
-			log.info(" fournisseur : " + fournisseur);
+			//Log.info(" fournisseur : " + fournisseur);
 		}
 		return fournisseurs;
 	}
@@ -61,21 +63,21 @@ public class FournisseurServiceImpl implements IFournisseurService {
 
 	@Override
 	public void deleteFournisseur(Long fournisseurId) {
-		fournisseurRepository.deleteById(fournisseurId);
+		fournisseurRepository.delete(fournisseurId);
 
 	}
 
 	@Override
 	public Fournisseur retrieveFournisseur(Long fournisseurId) {
 
-		Fournisseur fournisseur = fournisseurRepository.findById(fournisseurId).orElse(null);
+		Fournisseur fournisseur = fournisseurRepository.findOne(fournisseurId);
 		return fournisseur;
 	}
 
 	@Override
 	public void assignSecteurActiviteToFournisseur(Long idSecteurActivite, Long idFournisseur) {
-		Fournisseur fournisseur = fournisseurRepository.findById(idFournisseur).orElse(null);
-		SecteurActivite secteurActivite = secteurActiviteRepository.findById(idSecteurActivite).orElse(null);
+		Fournisseur fournisseur = fournisseurRepository.findOne(idFournisseur);
+		SecteurActivite secteurActivite = secteurActiviteRepository.findOne(idSecteurActivite);
         fournisseur.getSecteurActivites().add(secteurActivite);
         fournisseurRepository.save(fournisseur);
 		

@@ -1,6 +1,5 @@
 package tn.esprit.rh.achat.services;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.rh.achat.entities.*;
@@ -12,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@Slf4j
+//@Slf4j
 @Transactional
 public class FactureServiceImpl implements IFactureService {
 
@@ -33,7 +32,7 @@ public class FactureServiceImpl implements IFactureService {
 	public List<Facture> retrieveAllFactures() {
 		List<Facture> factures = (List<Facture>) factureRepository.findAll();
 		for (Facture facture : factures) {
-			log.info(" facture : " + facture);
+			//log.info(" facture : " + facture);
 		}
 		return factures;
 	}
@@ -52,7 +51,7 @@ public class FactureServiceImpl implements IFactureService {
 		float montantRemise = 0;
 		for (DetailFacture detail : detailsFacture) {
 			//Récuperer le produit 
-			Produit produit = produitRepository.findById(detail.getProduit().getIdProduit()).get();
+			Produit produit = produitRepository.findOne(detail.getProduit().getIdProduit());
 			//Calculer le montant total pour chaque détail Facture
 			float prixTotalDetail = detail.getQteCommandee() * produit.getPrix();
 			//Calculer le montant remise pour chaque détail Facture
@@ -75,7 +74,7 @@ public class FactureServiceImpl implements IFactureService {
 	public void cancelFacture(Long factureId) {
 		// Méthode 01
 		//Facture facture = factureRepository.findById(factureId).get();
-		Facture facture = factureRepository.findById(factureId).orElse(new Facture());
+		Facture facture = factureRepository.findOne(factureId);
 		facture.setArchivee(true);
 		factureRepository.save(facture);
 		//Méthode 02 (Avec JPQL)
@@ -85,21 +84,21 @@ public class FactureServiceImpl implements IFactureService {
 	@Override
 	public Facture retrieveFacture(Long factureId) {
 
-		Facture facture = factureRepository.findById(factureId).orElse(null);
-		log.info("facture :" + facture);
+		Facture facture = factureRepository.findOne(factureId);
+		//log.info("facture :" + facture);
 		return facture;
 	}
 
 	@Override
 	public List<Facture> getFacturesByFournisseur(Long idFournisseur) {
-		Fournisseur fournisseur = fournisseurRepository.findById(idFournisseur).orElse(null);
+		Fournisseur fournisseur = fournisseurRepository.findOne(idFournisseur);
 		return (List<Facture>) fournisseur.getFactures();
 	}
 
 	@Override
 	public void assignOperateurToFacture(Long idOperateur, Long idFacture) {
-		Facture facture = factureRepository.findById(idFacture).orElse(null);
-		Operateur operateur = operateurRepository.findById(idOperateur).orElse(null);
+		Facture facture = factureRepository.findOne(idFacture);
+		Operateur operateur = operateurRepository.findOne(idOperateur);
 		operateur.getFactures().add(facture);
 		operateurRepository.save(operateur);
 	}
