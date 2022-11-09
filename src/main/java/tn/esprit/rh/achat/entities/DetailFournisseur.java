@@ -1,6 +1,7 @@
 package tn.esprit.rh.achat.entities;
 
 import java.io.Serializable;
+
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,16 +11,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class DetailFournisseur implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -33,5 +28,58 @@ public class DetailFournisseur implements Serializable{
 	@OneToOne(mappedBy="detailFournisseur")
 	@JsonIgnore
 	private Fournisseur fournisseur;
+	public Long getIdDetailFournisseur() {
+		return idDetailFournisseur;
+	}
+	public void setIdDetailFournisseur(Long idDetailFournisseur) {
+		this.idDetailFournisseur = idDetailFournisseur;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public Date getDateDebutCollaboration() {
+		return dateDebutCollaboration;
+	}
+	public void setDateDebutCollaboration(Date dateDebutCollaboration) {
+		this.dateDebutCollaboration = dateDebutCollaboration;
+	}
+	public String getAdresse() {
+		return adresse;
+	}
+	public void setAdresse(String adresse) {
+		this.adresse = adresse;
+	}
+	public String getMatricule() {
+		return matricule;
+	}
+	public void setMatricule(String matricule) {
+		this.matricule = matricule;
+	}
+	public Fournisseur getFournisseur() {
+		return fournisseur;
+	}
+	public void setFournisseur(Fournisseur fournisseur) {
+		this.fournisseur = fournisseur;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	public DetailFournisseur(Long idDetailFournisseur, String email, Date dateDebutCollaboration, String adresse,
+			String matricule, Fournisseur fournisseur) {
+		super();
+		this.idDetailFournisseur = idDetailFournisseur;
+		this.email = email;
+		this.dateDebutCollaboration = dateDebutCollaboration;
+		this.adresse = adresse;
+		this.matricule = matricule;
+		this.fournisseur = fournisseur;
+	}
+	public DetailFournisseur() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	
 }
