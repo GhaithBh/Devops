@@ -25,7 +25,7 @@ public class SecteurActiviteServiceImpl implements ISecteurActiviteService{
 
 	@Override
 	public void deleteSecteurActivite(Long id) {
-		secteurActiviteRepository.delete(id);
+		secteurActiviteRepository.deleteById(id);
 		
 	}
 
@@ -37,7 +37,7 @@ public class SecteurActiviteServiceImpl implements ISecteurActiviteService{
 
 	@Override
 	public SecteurActivite retrieveSecteurActivite(Long id) {
-		SecteurActivite secteurActivite = secteurActiviteRepository.findOne(id);
+		SecteurActivite secteurActivite = secteurActiviteRepository.findById(id).orElse(null);
 		return secteurActivite;
 	}
 

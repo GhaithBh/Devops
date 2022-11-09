@@ -16,7 +16,7 @@ public class CategorieProduitServiceImpl implements ICategorieProduitService {
 	@Override
 	public List<CategorieProduit> retrieveAllCategorieProduits() {
 		
-		return (List<CategorieProduit>) categorieProduitRepository.findAll();
+		return categorieProduitRepository.findAll();
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class CategorieProduitServiceImpl implements ICategorieProduitService {
 
 	@Override
 	public void deleteCategorieProduit(Long id) {
-		//categorieProduitRepository.deleteById(id);
+		categorieProduitRepository.deleteById(id);
 		
 	}
 
@@ -39,7 +39,7 @@ public class CategorieProduitServiceImpl implements ICategorieProduitService {
 
 	@Override
 	public CategorieProduit retrieveCategorieProduit(Long id) {
-		CategorieProduit categorieProduit = categorieProduitRepository.findOne(id);
+		CategorieProduit categorieProduit = categorieProduitRepository.findById(id).orElse(null);
 		return categorieProduit;
 	}
 
