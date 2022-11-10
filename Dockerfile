@@ -1,7 +1,10 @@
-FROM openjdk:8-jdk-alpine
-VOLUME /tmp
-ADD target/devOpsDemo-0.0.1-SNAPSHOT.jar app.jar
+FROM openjdk:8
+EXPOSE 8088
 
-ENTRYPOINT ["java","-jar","app.jar"]
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+ONBUILD ADD . /usr/src/app
+ONBUILD RUN mvn install -DskipTests
+ONBUILD ADD /usr/src/app/target/devopsProject-1.0.jar app.jar
 
-EXPOSE 2222
+CMD ["java","-jar","/app.jar"]
