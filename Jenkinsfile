@@ -46,27 +46,32 @@ pipeline {
                 sh """mvn deploy """
             }
         }
-        stage('Build Docker Image with new code') {
-      // build docker image
-      dockerImage = docker.build("ihebhamdi/devops")
-    }
-    stage('Push Image to Remote Repo'){
-	 echo "Docker Image Tag Name ---> ihebhamdi/devops"
-	     docker.withRegistry('', 'dockerHub') {
-             dockerImage.push("latest")
+         stage('Docker build')
+        {
+            steps {
+                 sh 'docker build -t ihebhamdi/devops  .'
             }
-	}
-   
-        stage('Remove running container with old id'){
-	   //remove the container which is already running, when running 1st time named container will not be available so we are usign 'True'
-	   //added -a option to remove stopped container also
-	  sh "docker rm -f \$(docker ps -a -f name=devops -q) || true"   
-	       
-    }
-    stage('Remove old images') {
-		// remove docker old images
-		sh("docker rmi ihebhamdi/devops:latest -f")
-   }
+        }
+        stage('Docker login')
+        {
+            steps {
+                sh 'echo $dockerhub_PSW | docker login -u ihebhamdi -p dckr_pat_OaNAxtGSk9tP8ZPv8g08oIpcc4w'
+            }    
+       
+        }
+      stage('Push') {
+
+			steps {
+				sh 'docker push ihebhamdi/devops'
+			}
+		}
+        
+       stage('Run app With DockerCompose') {
+              steps {
+                  sh "docker-compose -f docker-compose.yml up -d  "
+              }
+              }
+        
 
     }
 }
