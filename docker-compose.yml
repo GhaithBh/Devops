@@ -19,7 +19,7 @@ services:
     container_name: achat-backend
     ports:
       - '8079:8077'
-    image: ihebhamdi/devops:55
+    image: ihebhamdi/devops
 
   
 

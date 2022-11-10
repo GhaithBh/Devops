@@ -71,7 +71,13 @@ pipeline {
                   sh "docker-compose -f docker-compose.yml up -d  "
               }
               }
-        
+        stage('Sending email'){
+           steps {
+            mail bcc: '', body: '''Hello from Jenkins,
+            Devops Pipeline returned success.
+            Cordialement''', cc: '', from: '', replyTo: '', subject: 'Devops Pipeline', to: 'iheb.hamdi.1@esprit.tn'
+            }
+       }
 
     }
 }
