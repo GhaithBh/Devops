@@ -1,100 +1,89 @@
 package tn.esprit.rh.achat.services.facture;
 
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import tn.esprit.rh.achat.entities.Facture;
-import tn.esprit.rh.achat.entities.Operateur;
-import tn.esprit.rh.achat.repositories.FactureRepository;
-import tn.esprit.rh.achat.repositories.OperateurRepository;
-import tn.esprit.rh.achat.services.FactureServiceImpl;
-import tn.esprit.rh.achat.services.IFactureService;
-import tn.esprit.rh.achat.services.IOperateurService;
-import tn.esprit.rh.achat.services.ReglementServiceImpl;
 
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import tn.esprit.rh.achat.entities.Facture;
+import tn.esprit.rh.achat.repositories.FactureRepository;
+import tn.esprit.rh.achat.services.FactureServiceImpl;
+
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-
-@ExtendWith(MockitoExtension.class)
 @SpringBootTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class FactureServiceImplTest {
-//test aziz 111
-    @Autowired
-    IFactureService factureService;
-    @Autowired
-    IOperateurService iOperateurService;
+@ExtendWith(MockitoExtension.class)
+public class FactureServiceTest {
+
     @Mock
     FactureRepository factureRepository;
-    @Mock
-    ReglementServiceImpl reglementService;
+
     @InjectMocks
-    FactureServiceImpl factureServiceImp;
-
-    Facture facture = new Facture((float) 7.4, (float) 99.2,new Date(),new Date(),false);
-
-    List<Facture> listFacture = new ArrayList<Facture>(){
-        {
-            add(new Facture((float) 6.4, (float) 99.2,new Date(),new Date(),true));
-            add(new Facture((float) 7.9, (float) 99.2,new Date(),new Date(),true));
-        }
-    }
-    @Test
-    @Order(1)
-    void addFacture(){
-        Mockito.when(factureRepository.save(facture)).thenReturn(facture);
-        Facture facture1 = factureServiceImp.addFacture(facture);
-        assertNotNull(facture1);
-    }
-    @Test
-    @Order(2)
-    void retrieveAllFactures(){
-        Mockito.when(factureRepository.findAll()).thenReturn(listFacture);
-        List<Facture> listFacture1 = factureServiceImp.retrieveAllFactures();
-        assertTrue(listFacture1.size()>=0);
-    }
-    @Test
-    @Order(3)
-    void retrieveFacture() {
-        Mockito.when(factureRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(facture));
-        Facture facture1 = factureServiceImp.retrieveFacture(2L);
-        assertNotNull(facture1);
-    }
+    FactureServiceImpl factureService;
 
     @Test
-    @Order(4)
-    void cancelFacture(){
-        Mockito.doNothing().when(factureRepository).updateFacture(Mockito.anyLong());
-        factureServiceImp.cancelFacture(1L);
-        Mockito.verify(factureRepository, Mockito.times(1)).updateFacture(1L);
+    public void testRetrieveFacture() {
+
+        Facture facture = new Facture(1L, 100, 500, null, null, null, null, null, null);
+
+        facture.setIdFacture(1L);
+
+        Mockito.when(factureRepository.findById(1L)).thenReturn(Optional.of(facture));
+        factureService.retrieveFacture(1L);
+        Assertions.assertNotNull(facture);
+
+        System.out.println(facture);
+        System.out.println(" Retrieve is working correctly...!!");
+
     }
+
+
     @Test
-    @Order(5)
-    void assignOperateurToFacture() {
-        Facture f = new Facture((float) 7.4, (float) 99.2,new Date(),new Date(),false);
-        Operateur o = new Operateur("iheb", "hamdi", "123");
-        Facture factureAdded = factureService.addFacture(f);
-        Operateur operateurAdded = iOperateurService.addOperateur(o);
-        factureService.assignOperateurToFacture(operateurAdded.getIdOperateur(),factureAdded.getIdFacture());
-        assertNotNull(iOperateurService.retrieveOperateur(operateurAdded.getIdOperateur()).getFactures());
-        iOperateurService.deleteOperateur(operateurAdded.getIdOperateur());
-        factureRepository.delete(factureAdded);
+    public void createFacturekTest()
+    {
+        Facture facture2 = new Facture(2L, 100, 500, null, null, null, null, null, null);
+        facture2.setIdFacture(2L);
+
+        factureService.addFacture(facture2);
+        verify(factureRepository, times(1)).save(facture2);
+        System.out.println(facture2);
+        System.out.println(" Create is working correctly...!!");
     }
+
+
+    @Test
+    public void getAllFactureTest()
+    {
+        List<Facture> Facturelist = new ArrayList<Facture>() {
+
+            {
+                add(new Facture(3L, 100, 700, null, null, null, null, null, null));
+                add(new Facture(4L, 200, 800, null, null, null, null, null, null));
+                add(new Facture(5L, 300, 900, null, null, null, null, null, null));
+            }};
+
+
+        when(factureService.retrieveAllFactures()).thenReturn(Facturelist);
+        //test
+        List<Facture> factureList = factureService.retrieveAllFactures();
+        assertEquals(3, factureList.size());
+        System.out.println(" Retrieve all is working correctly...!!");
+    }
+
+
+
 
 }
