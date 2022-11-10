@@ -75,7 +75,7 @@ pipeline {
            steps {
             mail bcc: '', body: '''Hello from Jenkins,
             Devops Pipeline returned success.
-            Cordialement''', cc: '', from: '', replyTo: '', subject: 'Devops Pipeline', to: 'iheb.hamdi.1@esprit.tn'
+            Best Regards''', cc: '', from: '', replyTo: '', subject: 'Devops Pipeline', to: 'iheb.hamdi.1@esprit.tn'
             }
        }
 
