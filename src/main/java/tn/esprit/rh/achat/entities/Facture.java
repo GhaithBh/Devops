@@ -50,4 +50,4 @@ public class Facture implements Serializable {
 		this.dateDerniereModificationFacture = dateDerniereModificationFacture;
 		this.archivee = archivee;
 	
-}
+} }
