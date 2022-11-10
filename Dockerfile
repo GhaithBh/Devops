@@ -1,10 +1,5 @@
-FROM openjdk:8
-EXPOSE 8088
-
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-ONBUILD ADD . /usr/src/app
-ONBUILD RUN mvn install -DskipTests
-ONBUILD ADD /usr/src/app/target/devopsProject-1.0.jar app.jar
-
-CMD ["java","-jar","/app.jar"]
+FROM eclipse-temurin:11-jdk-alpine
+ARG IP
+ADD http://$IP:8081/repository/maven-releases/tn/esprit/rh/achat/1.0/achat-1.0.jar achat-1.0.jar
+EXPOSE 8089
+ENTRYPOINT ["java","-jar","/achat-1.0.jar"]
