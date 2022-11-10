@@ -37,7 +37,7 @@ public class FactureServiceTest {
     @Test
     public void testRetrieveFacture() {
 
-        Facture facture = new Facture(1L, 100, 500, null, null, null, null, null);
+        Facture facture = new Facture(1L, 100, 500, null, null, null, null, null, null);
 
         facture.setIdFacture(1L);
 
@@ -54,7 +54,7 @@ public class FactureServiceTest {
     @Test
     public void createFacturekTest()
     {
-        Facture facture2 = new Facture(2L, 100, 500, null, null, null, null, null);
+        Facture facture2 = new Facture(2L, 100, 500, null, null, null, null, null, null);
         facture2.setIdFacture(2L);
 
         factureService.addFacture(facture2);
@@ -70,9 +70,9 @@ public class FactureServiceTest {
         List<Facture> Facturelist = new ArrayList<Facture>() {
 
             {
-                add(new Facture(3L, 100, 700, null, null, null, null, null));
-                add(new Facture(4L, 200, 800, null, null, null, null, null));
-                add(new Facture(5L, 300, 900, null, null, null, null, null));
+                add(new Facture(3L, 100, 700, null, null, null, null, null, null));
+                add(new Facture(4L, 200, 800, null, null, null, null, null, null));
+                add(new Facture(5L, 300, 900, null, null, null, null, null, null));
             }};
 
 
