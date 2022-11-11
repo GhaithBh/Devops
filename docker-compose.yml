@@ -7,8 +7,9 @@ services:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=achatdb
     ports:
-      - 3306:3306
-
+        - 3306:3306
+    networks:
+      - backend-net
 
 
   app_achat_back:
@@ -27,3 +28,19 @@ services:
             "spring.jpa.hibernate.ddl-auto" : "update",
             "spring.jpa.properties.hibernate.dialect": "org.hibernate.dialect.MySQL5InnoDBDialect"
           }'
+    networks:
+      - backend-net
+      - frontend-net
+
+  app_achat_front :
+    image : ihebhamdi/achat_front
+    ports:
+      - 80:80
+    depends_on :
+      - app_achat_back
+    restart : on-failure
+    networks :
+      - frontend-net
+networks:
+  backend-net :
+  frontend-net :
