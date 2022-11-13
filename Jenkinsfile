@@ -29,7 +29,7 @@ pipeline {
         stage ('MOCK TEST') {
             steps{
                 sh 'mvn  test'
-                junit 'target/surefire-reports/**/*.xml'
+                //junit 'target/surefire-reports/**/*.xml'
                 jacoco()
             }
         }
