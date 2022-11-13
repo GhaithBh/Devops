@@ -10,7 +10,7 @@ pipeline {
                     credentialsId:"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";
             }
         }
-        /*
+
         stage('DB UP') {
             steps{
                 sh '''
@@ -29,6 +29,8 @@ pipeline {
         stage ('MOCK TEST') {
             steps{
                 sh 'mvn  test'
+                junit 'target/surefire-reports/**/*.xml'
+                jacoco()
             }
         }
         stage ('SonarQube SCAN') {
@@ -67,7 +69,7 @@ pipeline {
               steps {
                   sh "docker-compose -f docker-compose.yml up -d  "
               }
-              }*/
+              }
     }
     post {
     always {
