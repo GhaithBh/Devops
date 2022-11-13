@@ -10,7 +10,7 @@ pipeline {
                     credentialsId:"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";
             }
         }
-        stage('database connection') {
+        stage('DB UP') {
             steps{
                 sh '''
                 sudo docker stop mysql || true
@@ -18,60 +18,56 @@ pipeline {
                 '''
             }
         }
-        stage('cleanig the project') {
+        stage('MAVEN CHECK') {
             steps{
                 sh 'mvn clean'
+                sh 'mvn  package'
             }
 
         }
-        stage ('artifact construction') {
-            steps{
-                sh 'mvn  package'
-            }
-        }
-        stage ('Unit Test') {
+        stage ('MOCK TEST') {
             steps{
                 sh 'mvn  test'
             }
         }
-        stage ('SonarQube analysis') {
+        stage ('SonarQube SCAN') {
             steps{
                 sh '''
                 mvn sonar:sonar
                 '''
             }
         }
-        stage('Nexus'){
+        stage('DEPLOY -> Nexus'){
             steps{
                 sh """mvn deploy """
             }
         }
-         stage('Docker build')
+         stage('BUILD IMAGE')
         {
             steps {
                  sh 'docker build --build-arg IP=0.0.0.0 -t ihebhamdi/devops  .'
             }
         }
-        stage('Docker login')
+        stage('AUTH')
         {
             steps {
                 sh 'echo $dockerhub_PSW | docker login -u ihebhamdi -p dckr_pat_9YAJAIlUg1TpVlKFUAf3f48oLEI'
             }    
        
         }
-      stage('Push') {
+      stage('PUSH') {
 
 			steps {
 				sh 'docker push ihebhamdi/devops'
 			}
 		}
         
-       stage('Run app With DockerCompose') {
+       stage('START') {
               steps {
                   sh "docker-compose -f docker-compose.yml up -d  "
               }
               }
-        stage('Sending email'){
+        stage('NOTIFY'){
            steps {
             mail bcc: '', body: '''Hello from Jenkins,
             Devops Pipeline returned success.
