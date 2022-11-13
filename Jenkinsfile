@@ -71,10 +71,10 @@ pipeline {
     }
     post {
     always {
-       emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
-                recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
-                subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
-                to: 'iheb.hamdi.1@esprit.tn'
+       mail to: 'iheb.hamdi.1@esprit.tn',
+          subject: "Status of pipeline: ${currentBuild.fullDisplayName}",
+          body: "${env.BUILD_URL} has result ${currentBuild.result}",
+          attachLog: true, compressLog:true
     }
   }
 }
