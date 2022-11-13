@@ -7,7 +7,7 @@ pipeline {
             steps {
                 git branch : 'Iheb' ,
                     url : 'https://github.com/GhaithBh/Devops.git',
-                    credentialsId:"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";
+                    credentialsId:"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";
             }
         }
         stage('DB UP') {
