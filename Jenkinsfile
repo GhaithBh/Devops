@@ -9,7 +9,8 @@ pipeline {
                     url : 'https://github.com/GhaithBh/Devops.git',
                     credentialsId:"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";
             }
-        }/*
+        }
+        /*
         stage('DB UP') {
             steps{
                 sh '''
