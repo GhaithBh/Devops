@@ -1,0 +1,117 @@
+pipeline {
+    agent any
+   
+    environment {
+        DOCKERHUB_CREDENTIALS=credentials('dockerhub')
+    }
+    
+    
+    stages {
+        stage ('Git') {
+            steps {
+                echo 'pulling...';
+                git branch :'marwa' ,
+           
+                url : 'https://github.com/GhaithBh/Devops.git'
+            }
+        }
+        
+        
+        
+         stage ('Testing Maven') {
+            steps {
+
+                sh """mvn -version"""
+            }
+        }
+        
+        
+        stage ('Maven Clean') {
+            steps {
+//                sh 'cd achat'
+                sh 'mvn clean'
+            }
+        }
+        stage ('Maven Compile') {
+            steps {
+//                sh "cd achat"
+                sh "mvn compile"
+            }
+        }
+
+        
+      
+        
+
+        stage ('Maven Test ') {
+            steps {
+                sh 'mvn test' 
+               
+            }
+        }
+        
+    
+        stage ('Create .jar file') {
+            steps {
+                sh 'mvn clean install' 
+               //echo "building"
+            }
+        }
+
+    stage('Maven SONARQUBE') {
+            steps {
+              withSonarQubeEnv (installationName: 'sonar') {
+         sh "mvn sonar:sonar"
+             //echo "sonar"
+               
+          
+        }
+      }
+        
+      }
+ 
+
+       stage('Nexus') {
+            steps {
+                script{
+          nexusPublisher nexusInstanceId: 'nexus',
+                                          nexusRepositoryId: 'achat',
+                                          packages: [[$class: 'MavenPackage', 
+                                          mavenAssetList: [[classifier: '', extension: '', filePath: 'target/achat-1.0.jar']], 
+                                          mavenCoordinate: [artifactId: 'achat', groupId: 'tn.esprit.rh', packaging: 'jar', version: '1.0']]]      
+                }
+            }
+        } 
+        
+            stage('BUILDING IMAGE'){
+    steps {
+        sh 'ls target/'
+        sh 'docker build -t achatapp .'
+    }
+}
+stage('push') {
+        steps{
+            
+              sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
+                sh 'docker tag achatapp marwatt/achatapp'
+                //sh 'docker push marwatt/achatapp'
+                
+        }
+        
+        
+        
+        }
+stage('docker compose'){
+    steps {
+        sh 'docker-compose up -d'
+    }
+}
+
+ 
+
+    }
+    
+    
+    
+    
+}
