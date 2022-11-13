@@ -80,8 +80,7 @@ pipeline {
     recipientProviders: [[$class: 'DevelopersRecipientProvider'], 
      [$class: 'RequesterRecipientProvider']],
     replyTo: 'do-not-reply@company.com', 
-    subject: "Status: ${currentBuild.result?:'SUCCESS'} - 
-    Job \'${env.JOB_NAME}:${env.BUILD_NUMBER}\'", 
+    subject: "Status: ${currentBuild.result?:'SUCCESS'} - Job \'${env.JOB_NAME}:${env.BUILD_NUMBER}\'", 
     to: 'iheb.hamdi.1@esprit.tn'
     }
   }
