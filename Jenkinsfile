@@ -70,16 +70,11 @@ pipeline {
               }*/
     }
     post {
-    success {
-            emailext body: 'Check console output at $BUILD_URL to view the results. \n\n ${CHANGES} \n\n -------------------------------------------------- \n${BUILD_LOG, maxLines=100, escapeHtml=false}', 
-                    to: "iheb.hamdi.1@esprit.tn", 
-                    subject: 'Build Success in Jenkins: $PROJECT_NAME - #$BUILD_NUMBER'
-        }
-        
-        failure {
-            emailext body: 'Check console output at $BUILD_URL to view the results. \n\n ${CHANGES} \n\n -------------------------------------------------- \n${BUILD_LOG, maxLines=100, escapeHtml=false}', 
-                    to: "iheb.hamdi.1@esprit.tn", 
-                    subject: 'Build failed in Jenkins: $PROJECT_NAME - #$BUILD_NUMBER'
-        }
+    always {
+       mail to: 'iheb.hamdi.1@esprit.tn',
+          subject: "Status of pipeline: ${currentBuild.fullDisplayName}",
+          body: "${env.BUILD_URL} has result ${currentBuild.result}",
+          attachLog: true
+    }
   }
 }
