@@ -9,7 +9,7 @@ pipeline {
                     url : 'https://github.com/GhaithBh/Devops.git',
                     credentialsId:"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";
             }
-        }
+        }/*
         stage('DB UP') {
             steps{
                 sh '''
@@ -66,13 +66,22 @@ pipeline {
               steps {
                   sh "docker-compose -f docker-compose.yml up -d  "
               }
-              }
+              }*/
     }
     post {
     always {
-       mail to: 'iheb.hamdi.1@esprit.tn',
-          subject: "Status of pipeline: ${currentBuild.fullDisplayName}",
-          body: "${env.BUILD_URL} has result ${currentBuild.result}"
+       emailext attachLog: true, body:
+   """<p>EXECUTED: Job <b>\'${env.JOB_NAME}:${env.BUILD_NUMBER})\'
+   </b></p><p>View console output at "<a href="${env.BUILD_URL}"> 
+   ${env.JOB_NAME}:${env.BUILD_NUMBER}</a>"</p> 
+     <p><i>(Build log is attached.)</i></p>""", 
+    compressLog: true,
+    recipientProviders: [[$class: 'DevelopersRecipientProvider'], 
+     [$class: 'RequesterRecipientProvider']],
+    replyTo: 'do-not-reply@company.com', 
+    subject: "Status: ${currentBuild.result?:'SUCCESS'} - 
+    Job \'${env.JOB_NAME}:${env.BUILD_NUMBER}\'", 
+    to: 'iheb.hamdi.1@esprit.tn'
     }
   }
 }
