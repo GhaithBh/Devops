@@ -74,7 +74,8 @@ pipeline {
        mail to: 'iheb.hamdi.1@esprit.tn',
           subject: "Status of pipeline: ${currentBuild.fullDisplayName}",
           body: "${env.BUILD_URL} has result ${currentBuild.result}",
-          attachLog: true, compressLog:true
+          attachLog: true, 
+          compressLog:true
     }
   }
 }
