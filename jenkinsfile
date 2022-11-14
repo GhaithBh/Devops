@@ -110,7 +110,7 @@ stage('push') {
     post{
         always{
         
-        emailext body: 'jenkins', subject: 'jenkins', to: 'marwa.tlili@esprit.tn'
+        emailext body: 'jenkins', subject: 'jenkins', to: 'marwatlili2311@gmail.com'
                  }
         
               }      
