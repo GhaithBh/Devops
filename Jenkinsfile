@@ -1,51 +1,98 @@
-node {
-    try{
-   
-        stage('checkout GIT'){
-            echo 'Pulling';
-            git branch: 'fatima',
-            url : 'https://github.com/GaithBh/Devops',
-            credentialsId: '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'
-                
-        }
-        stage(' compiling '){
-            
-            sh """mvn compile"""
-        }
-        stage(' packaging '){
-            
-            sh  """mvn package"""
-        }
-        stage(' Sonarqube scan'){
-            sh  """mvn sonar:sonar -Dsonar.login=a3b0ece5ce9ed145307202b25877e362e8652716 -Dsonar.host.url=http://192.168.56.101:9000"""
-
-        }
-        
-        stage('Junit/Mokito'){
-            sh """mvn test"""
-            
-        }
-        
-       
-        stage('Nexus'){
-            nexusPublisher nexusInstanceId: "Nexus" , nexusRepositoryId: 'Devops', packages: [[$class: 'MavenPackage', mavenAssetList: 
-            [classifier: '', extension: '', filepath: './target/achat-api.jar' ]],mavenCoordinate: [artifactId: 'achat', groupId: 
-            'tn.esprit.rh', packaging: 'jar', version: '1']]]
-            
-        }
-        
-         stage('Docker'){
-            
-        }
-    }  
-    catch(e) {
-        def to = "fatimetou.cheikhneda@esprit.tn"
-        currentBuilder.result = 'FAILURE'
-        def subject = "Jenkins - Build Failure"
-        def content = '${JELLY_SCRIPT, template="html"}'
-        emailext(body: content, mimeType: 'text/html',
-                replyTp: '$DEFAULT_REPLYTO', subject: subject,
-                to: to)
+pipeline {
+    
+    environment { 
+        registry = "fatimetouu19/devops_project1" 
+        registryCredential = 'dockerhub_id' 
+        dockerImage = '' 
     }
+
+
+    agent any
+
+    stages {
         
+                stage('git') {
+            steps {
+            
+                git branch: 'fatima', url: 'https://github.com/GhaithBh/Devops.git',
+                credentialsId:"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";
+                
+            }
+}
+       stage('Cleaning'){
+            steps {
+               sh """mvn clean"""
+            }
+        }
+       stage('Compiling'){
+            steps {
+               sh """mvn compile"""
+            }
+        }
+        
+      stage("packaging"){
+            steps {
+                sh """mvn package -e"""
+                
+            }
+        }
+      stage("SONARQUBE"){
+            steps {
+                sh """mvn sonar:sonar -Dsonar.login=a3b0ece5ce9ed145307202b25877e362e8652716 -Dsonar.host.url=http://192.168.1.11:9000"""
+                
+            }
+        }
+        stage("Junit/Mockito"){
+            steps {
+                sh """mvn test """
+                
+            }
+        }
+        stage ('Publish to Nexus') {
+            steps {
+                sh """mvn deploy -e"""
+                
+            }
+        }
+        
+        stage('Building our image') { 
+            steps {
+                script { 
+                    dockerImage = docker.build registry 
+                }
+            } 
+        }
+        stage('Deploy our image') { 
+            steps { 
+                script {
+                    docker.withRegistry( '', registryCredential ) { 
+                        dockerImage.push()
+                    }
+                } 
+            }
+        } 
+        stage('Cleaning up') { 
+            steps { 
+                sh "docker rmi $registry" 
+            }
+        } 
+        stage('Running app') { 
+            steps { 
+                sh '''
+                sudo docker stop mysql || true
+                sudo docker restart mysql || true
+                '''
+                sh "docker-compose up -d" 
+            }
+        } 
+        
+
+    }
+    post{
+        failure{
+            emailext to: "fatimetouche07@gmail.com",
+            subject: "jenkins build:${currentBuild.currentResult}: ${env.JOB_NAME}",
+            body: "${currentBuild.currentResult}: Job ${env.JOB_NAME}\nMore Info can be found here: ${env.BUILD_URL}"
+        }
+    }
 }
