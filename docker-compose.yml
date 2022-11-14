@@ -26,7 +26,7 @@ services:
       - MYSQL_USER=marwa
       - MYSQL_PASSWORD=marwa
     ports:
-      - 3307:3306
+      - 3306:3306
     volumes:
       - tp-achat-mysql-vol:/my/own/datadir       
 
