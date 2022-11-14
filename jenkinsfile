@@ -106,10 +106,10 @@ stage('push') {
             sh 'docker-compose up -d'
                }
                             }
-                            stage('Sending email'){
+     stage('Notification'){
            steps {
             mail bcc: '', body: '''Ping.. ,
-            Pipeline successfully executed  .
+            build done  .
             Keep Up The Good Work''', cc: '', from: '', replyTo: '', subject: 'Devops Pipeline', to: 'marwa.tlili@esprit.tn'
             }
        }
