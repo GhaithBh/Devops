@@ -106,13 +106,14 @@ stage('push') {
             sh 'docker-compose up -d'
                }
                             }
+                            stage('Sending email'){
+           steps {
+            mail bcc: '', body: '''Ping.. ,
+            Pipeline successfully executed  .
+            Keep Up The Good Work''', cc: '', from: '', replyTo: '', subject: 'Devops Pipeline', to: 'marwa.tlili@esprit.tn'
+            }
+       }
 }
-    post{
-        always{
-        
-        emailext body: 'jenkins', subject: 'jenkins', to: 'marwa.tlili@esprit.tn'
-                 }
-        
-              }      
+    
     
 }
