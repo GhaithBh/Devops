@@ -75,6 +75,7 @@ pipeline {
         sh 'docker run --name fast -e WALLARM_API_TOKEN="nOWYnNysqR01aDqdIuHlADkq/+r57IBuGGDCT3dzT+lDDD6Fx1NIrJQbLNDB0zhM" -e CI_MODE=testing -e WALLARM_API_HOST=us1.api.wallarm.com -p 8080:8080 -e TEST_RUN_URI=http://app-test:4000 --network my-network --rm wallarm/fast'
       }
     }
+    }
     post {
     always {
        mail to: 'iheb.hamdi.1@esprit.tn',
@@ -82,5 +83,4 @@ pipeline {
           body: "${env.BUILD_URL} has result ${currentBuild.result}"
     }
   }
-}
 }
