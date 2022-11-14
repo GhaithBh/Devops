@@ -75,7 +75,7 @@ pipeline {
             steps {
                 script{
           nexusPublisher nexusInstanceId: 'nexus',
-                                          nexusRepositoryId: 'achat',
+                                          nexusRepositoryId: 'maven-releases',
                                           packages: [[$class: 'MavenPackage', 
                                           mavenAssetList: [[classifier: '', extension: '', filePath: 'target/achat-1.0.jar']], 
                                           mavenCoordinate: [artifactId: 'achat', groupId: 'tn.esprit.rh', packaging: 'jar', version: '1.0']]]      
@@ -101,23 +101,18 @@ stage('push') {
         
         
         }
-stage('docker compose'){
-    steps {
-        sh 'docker-compose up -d'
-    }
+    stage('docker compose'){
+         steps {
+            sh 'docker-compose up -d'
+               }
+                            }
 }
-}
-post{
+    post{
         always{
         
         emailext body: 'jenkins', subject: 'jenkins', to: 'marwa.tlili@esprit.tn'
-        }
+                 }
         
-    }     
- 
-
-    
-    
-    
+              }      
     
 }
