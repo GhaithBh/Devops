@@ -57,6 +57,12 @@ pipeline {
                //echo "building"
             }
         }
+        
+        stage('Scan') {
+      steps {
+        sh 'trivy darinpope/achatapp:latest'
+      }
+    }
 
     stage('Maven SONARQUBE') {
             steps {
