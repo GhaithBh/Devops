@@ -100,7 +100,7 @@ stage('push') {
             
               sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW'
                 sh 'docker tag achatapp marwatt/achatapp'
-                sh 'docker push marwatt/achatapp'
+                //sh 'docker push marwatt/achatapp'
                 
         }
         
