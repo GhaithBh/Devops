@@ -60,7 +60,7 @@ pipeline {
         
         stage('Scan') {
       steps {
-        sh 'trivy darinpope/achatapp:latest'
+        sh 'trivy marwatt/achatapp:latest'
       }
     }
 
