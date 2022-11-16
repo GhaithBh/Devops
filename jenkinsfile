@@ -60,7 +60,7 @@ pipeline {
         
         stage('Scan') {
       steps {
-        sh 'trivy marwatt/achatapp:latest'
+        sh 'trivy --no-progress --exit-code 1 --severity HIGH,CRITICAL marwatt/achatapp:latest'
       }
     }
 
