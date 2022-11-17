@@ -57,12 +57,7 @@ pipeline {
                //echo "building"
             }
         }
-        
-        stage('Scan') {
-      steps {
-        sh 'trivy image marwatt/achatapp:latest'
-      }
-    }
+       
 
     stage('Maven SONARQUBE') {
             steps {
