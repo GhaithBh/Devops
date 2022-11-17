@@ -125,5 +125,44 @@
         </plugin>
   </plugins>
 	</build>
-
+<profiles>
+		<profile>
+			<id>run-with-contrast</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.contrastsecurity</groupId>
+						<artifactId>contrast-maven-plugin</artifactId>
+						<version>2.6</version>
+						<executions>
+							<execution>
+								<id>install-contrast-jar</id>
+								<goals>
+									<goal>install</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>verify-with-contrast</id>
+								<phase>post-integration-test</phase>
+								<goals>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<username>fatimetou.cheikhneda@esprit.tn</username>
+							<apiKey>F1bmJaX6kKW13dqjFpMvbav3PsbMP6r7</apiKey>
+							<serviceKey>P94DID8Y451BYQ2S</serviceKey>
+							<apiUrl>https://ce.contrastsecurity.com/Contrast/api</apiUrl>
+							<orgUuid>77c38f3c-3601-491a-8e3b-848f21fba3c4</orgUuid>
+							<appName>provider-directory</appName>
+							<serverName>venus</serverName>
+							<serverPath>/provider</serverPath>
+							<minSeverity>Note</minSeverity>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
